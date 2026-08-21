@@ -1,0 +1,1 @@
+export { default as usercont } from "./user.controller.js"
