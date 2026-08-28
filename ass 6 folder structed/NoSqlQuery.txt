@@ -1,0 +1,188 @@
+q1
+use books
+db.createCollection("books", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["title"],
+      properties: {
+        title: {
+          bsonType: "string",
+          minLength: 1,
+        },
+      },
+    },
+  },
+});
+===================================================================================
+q2
+db.authors.insertOne({name:"omar ezz" , nationality:"italiano"})
+===================================================================================
+q3
+db.createCollection("logs", {
+  capped: true,
+  size: 1048576})
+===================================================================================
+q4
+db.books.createIndex({
+  titel: 1
+})
+===================================================================================
+q5
+db.books.insertOne({titel:"book1" , author :"Ali", year :1937 , genres:["fantasy","adventure"]})
+===================================================================================
+q6
+db.books.insertMany([
+  {
+    title: "future",
+    author: "george",
+    year: 2020,
+    genres: ["science fiction"]
+  },
+  {
+    title: "to kill mockengbird",
+    author: "Andrew Hunt",
+    year: 1960,
+    genres: ["classic", "fiction"]
+  },
+  {
+    title: "brave new world",
+    author: "Douglas Crockford",
+    year: 2006,
+    genres: ["dystopian", "science fiction"]
+  }])
+===================================================================================
+q7
+db.logs.insertOne({
+  bookId: ObjectId("6a8b4b762dc19092cfecb785"),
+  action: "borrowed",
+  timestamp: new Date()
+})
+===================================================================================
+q8
+db.books.updateOne(
+  { title: "future" },
+  { $set: { year: 2026 } }
+)
+===================================================================================
+q9
+db.books.findOne({title:"BraveNewWorld"})
+===================================================================================
+q10
+db.books.find({
+  year: {
+    $gte: 1990,
+    $lte: 2010
+  }
+})
+===================================================================================
+q11
+db.books.find({
+  genres: {
+    $in: ["Science Fiction"]
+  }
+})
+===================================================================================
+q12
+db.books.aggregate([
+  {
+    $sort: {
+      year: -1
+    }
+  },
+  {
+    $skip: 2
+  },
+  {
+    $limit: 3
+  }
+])
+===================================================================================
+q13
+db.books.find({
+  year: {
+    $type: "int"
+  }
+})
+===================================================================================
+q14
+db.books.find({
+  genres: {
+    $nin: ["Horror", "Science Fiction"]
+  }
+})
+===================================================================================
+q15
+db.books.deleteMany({
+  year: { $lt: 2000 }
+})
+===================================================================================
+q16
+db.books.aggregate([
+  {
+    $match: {
+      year: { $gt: 2000 }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      title: 1,
+      author: 1,
+      year: 1,
+      genres: 1
+    }
+  },
+  {
+    $sort: {
+      year: -1
+    }
+  }
+])
+===================================================================================
+q17
+db.books.aggregate([
+  {
+    $match: {
+      year: { $gt: 2000 }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      title: 1,
+      author: 1,
+      year: 1,
+      genres:0
+    }
+  },
+  {
+    $sort: {
+      year: -1
+    }
+  }
+])
+===================================================================================
+q18
+db.books.aggregate([
+  {
+    $unwind: {
+      path: "$genres",
+      includeArrayIndex: "tagIndex",
+      preserveNullAndEmptyArrays: true
+    }
+  }
+])
+===================================================================================
+q19
+db.books.aggregate([
+  {
+    $lookup: {
+      from: "logs",
+      localField: "_id",
+      foreignField: "bookId",
+      as: "logs"
+    }
+  }
+])
+===================================================================================
