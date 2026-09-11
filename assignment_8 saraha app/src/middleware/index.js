@@ -1,0 +1,1 @@
+export {globalErrorHandling} from "./error.middleware.js"
