@@ -1,0 +1,18 @@
+{
+  "name": "ass13",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+  "build": "tsc",
+  "start": "node dist/index.js",
+  "dev": "concurrently \"tsc --watch\" \"node --watch dist/index.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
